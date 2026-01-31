@@ -1,0 +1,14 @@
+﻿<link rel="stylesheet" href="~/css/steam/Index.css" asp-append-version="true" />
+@{
+    ViewData["Title"] = "Buscar jogos da Steam";
+}
+
+<h1>Buscar jogos da Steam</h1>
+
+<form method="post" asp-controller="Steam" asp-action="Jogos">
+    <div class="form-group">
+        <label for="steamIdInput">Digite seu SteamID64:</label>
+        <input type="text" class="form-control" id="steamIdInput" name="steamId" placeholder="Exemplo: 76561198000000000" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Buscar Jogos</button>
+</form>

@@ -1,0 +1,37 @@
+using ProjPlatinaSteam.Models.Settings;
+using ProjPlatinaSteam.Services;
+
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddHttpClient<SteamApiService>();
+
+builder.Services.Configure<SteamSettings>(
+    builder.Configuration.GetSection("Steam"));
+
+
+//Console.WriteLine($"Rodando na versão: {Environment.Version}");
+
+// Add services to the container.
+builder.Services.AddControllersWithViews();
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Steam}/{action=Index}/{id?}");
+
+app.Run();

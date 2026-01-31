@@ -1,0 +1,14 @@
+﻿body {
+}
+
+h1 {
+    display: grid;
+    place-items: center;
+    color: black;
+}
+
+.form-group {
+    display: grid;
+    padding: 10px;
+    place-items: center;
+}

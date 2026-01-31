@@ -1,0 +1,44 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model ProjPlatinaSteam.Models.ViewModels.JogosViewModel
+
+
+<h1>Jogos</h1>
+
+@if (Model != null)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nome do Jogo</th>
+                <th>AppID</th>
+                <th>Horas Jogadas</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var jogo in Model.Jogos)
+            {
+                <tr>
+                    <td>@jogo.name</td>
+                    <td>@jogo.id</td>
+                    <td>@jogo.gameHours</td>
+                    <td>
+                        <a asp-action="Conquistas"
+                           asp-route-steamId="@Model.SteamId"
+                           asp-route-gameId="@jogo.id"
+                           class="btn-achievementes">
+                            Achievements
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Nenhum jogo encontrado para este SteamID64.</p>
+}
