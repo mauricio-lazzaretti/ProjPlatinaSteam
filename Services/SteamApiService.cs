@@ -3,7 +3,9 @@ using ProjPlatinaSteam.Models;
 using ProjPlatinaSteam.Models.Settings;
 using ProjPlatinaSteam.Models.Steam;
 using ProjPlatinaSteam.Models.Steam.Achievements;
+using ProjPlatinaSteam.Models.Steam.Schema;
 using System.Net.Http;
+using System.Reflection;
 using System.Runtime;
 using System.Text.Json;
 
@@ -53,16 +55,36 @@ namespace ProjPlatinaSteam.Services
         }
 
         public async Task<List<Conquista>> GetUserAchievements(string steamId, string gameId)
+        {          
+            var achievements = await GetPlayerAchievements(steamId, gameId);
+            var schemaAchievements = await GetSchemaForGame(gameId);
+
+            var conquistas = achievements.Select(a => new Conquista
+            {    
+                nome = schemaAchievements.FirstOrDefault(s => s.name == a.apiname)?.displayName ?? string.Empty.ToString(),
+                descricao = schemaAchievements.FirstOrDefault(s => s.name == a.apiname)?.description ?? string.Empty.ToString(),
+                apiNome = a.apiname,
+                conquistada = a.achieved == 1,
+                unlockTime = a.unlockTime > 0
+                ? DateTimeOffset.FromUnixTimeSeconds(a.unlockTime).DateTime
+                : null
+            }).ToList();
+
+            return conquistas;
+            // return new List<Conquista>(); ;// retorna null por enquanto, so para evitar linha vermelha
+        }
+
+        public async Task<List<SteamAchievement>> GetPlayerAchievements(string steamId, string gameId)
         {
             var url =
-                $"https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?" +
-                $"key={_settings.ApiKey}&steamid={steamId}&appid={gameId}";
+               $"https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?" +
+               $"key={_settings.ApiKey}&steamid={steamId}&appid={gameId}";
 
             var response = await _httpClient.GetAsync(url);
 
             if (!response.IsSuccessStatusCode)
             {
-                return new List<Conquista>();
+                return new List<SteamAchievement>();
             }
 
             var content = await response.Content.ReadAsStringAsync();
@@ -71,17 +93,29 @@ namespace ProjPlatinaSteam.Services
 
             List<SteamAchievement> achievements = steamAchievementsResponse?.playerstats?.achievements ?? new List<SteamAchievement>();
 
-            var conquistas = achievements.Select(a => new Conquista
-            {
-                apiNome = a.apiname,
-                conquistada = a.achieved == 1,
-                unlockTime = a.unlockTime > 0
-            ? DateTimeOffset.FromUnixTimeSeconds(a.unlockTime).DateTime
-            : null
-            }).ToList();
+            return achievements;
+        }
 
-            return conquistas;
-            // return new List<Conquista>(); ;// retorna null por enquanto, so para evitar linha vermelha
+        public async Task<List<SteamSchemaAchievement>> GetSchemaForGame(string gameId)
+        {
+            var url =
+               $"https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?" +
+               $"key={_settings.ApiKey}&appid={gameId}&l=brazilian";
+
+            var response = await _httpClient.GetAsync(url);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return new List<SteamSchemaAchievement>();
+            }
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            var steamSchemaAchievementsResponse = JsonSerializer.Deserialize<SteamGameSchemaResponse>(content);
+
+            List<SteamSchemaAchievement> schemaAchievements = steamSchemaAchievementsResponse?.game?.availableGameStats?.achievements ?? new List<SteamSchemaAchievement>();
+
+            return schemaAchievements;
         }
     }
 }
