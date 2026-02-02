@@ -4,6 +4,7 @@ using ProjPlatinaSteam.Models.Settings;
 using ProjPlatinaSteam.Models.Steam;
 using ProjPlatinaSteam.Models.Steam.Achievements;
 using ProjPlatinaSteam.Models.Steam.Schema;
+using ProjPlatinaSteam.Interfaces;
 using System.Net.Http;
 using System.Reflection;
 using System.Runtime;
@@ -11,7 +12,7 @@ using System.Text.Json;
 
 namespace ProjPlatinaSteam.Services
 {
-    public class SteamApiService
+    public class SteamApiService : ISteamApiService
     {
         private readonly HttpClient _httpClient;
         private readonly SteamSettings _settings;

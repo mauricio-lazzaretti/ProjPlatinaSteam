@@ -1,11 +1,24 @@
+using Microsoft.EntityFrameworkCore;
+using ProjPlatinaSteam.Data;
+using ProjPlatinaSteam.Interfaces;
+using ProjPlatinaSteam.Interfaces.JogoInterface;
 using ProjPlatinaSteam.Models.Settings;
+using ProjPlatinaSteam.Repositories;
 using ProjPlatinaSteam.Services;
+using ProjPlatinaSteam.Services.JogoService;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpClient<SteamApiService>();
 
 builder.Services.Configure<SteamSettings>(
     builder.Configuration.GetSection("Steam"));
+
+builder.Services.AddDbContext<PlatinaSteamContext>(options => options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IJogoService, JogoService>();
+builder.Services.AddScoped<IJogoRepository, JogoRepository>();
+builder.Services.AddScoped<ISteamApiService, SteamApiService>();
 
 
 //Console.WriteLine($"Rodando na versão: {Environment.Version}");

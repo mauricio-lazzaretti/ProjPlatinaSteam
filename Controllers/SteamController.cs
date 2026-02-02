@@ -1,33 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ProjPlatinaSteam.Models;
+using ProjPlatinaSteam.Interfaces;
 using ProjPlatinaSteam.Models.ViewModels;
-using ProjPlatinaSteam.Services;
 
 namespace ProjPlatinaSteam.Controllers
 {
     public class SteamController : Controller
     {
-        private readonly SteamApiService _steamApiService;
+        private readonly ISteamApiService _steamApiService;
+        private readonly IJogoService _jogoService;
 
-        public SteamController(SteamApiService steamApiService)
+        public SteamController(ISteamApiService steamApiService, IJogoService jogoService)
         {
             _steamApiService = steamApiService;
+            _jogoService = jogoService;
         }
-
-        //public async Task<IActionResult> Teste()
-        //{
-        //    var jogos = await _steamApiService.GetUserGames("76561199564370952");
-        //    return Json(jogos);
-        //}
 
         public async Task<IActionResult> Jogos(string steamId)
         {
-            if(string.IsNullOrEmpty(steamId))
-            {
+            if (string.IsNullOrEmpty(steamId))
                 return RedirectToAction("Index");
-            }
 
-            var jogos = await _steamApiService.GetUserGames(steamId);
+            var jogos = await _jogoService.ObterJogosDoUsuario(steamId);
 
             var viewModel = new JogosViewModel
             {
@@ -38,13 +31,10 @@ namespace ProjPlatinaSteam.Controllers
             return View(viewModel);
         }
 
-        public async Task<IActionResult> Conquistas( string steamId, string gameId)
+        public async Task<IActionResult> Conquistas(string steamId, string gameId)
         {
-            //metodo que deve carregar as conquistas de um jogo
-            if(string.IsNullOrEmpty(steamId))
-            {
+            if (string.IsNullOrEmpty(steamId) || string.IsNullOrEmpty(gameId))
                 return RedirectToAction("Index");
-            }
 
             var conquistas = await _steamApiService.GetUserAchievements(steamId, gameId);
 
