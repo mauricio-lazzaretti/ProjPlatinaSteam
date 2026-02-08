@@ -14,10 +14,10 @@ namespace ProjPlatinaSteam.Repositories
             _context = context;
         }
 
-        public async Task<Jogo?> ObterPorSteamAppIdAsync(long steamAppId)
+        public async Task<Jogo?> ObterPorSteamAppIdEUserAsync(long steamAppId, int usuarioId)
         {
             return await _context.Jogos
-                .FirstOrDefaultAsync(j => j.id == steamAppId.ToString());
+                .FirstOrDefaultAsync(j => j.id == steamAppId && j.UsuarioSteamId == usuarioId);
         }
 
         public async Task AdicionarAsync(Jogo jogo)

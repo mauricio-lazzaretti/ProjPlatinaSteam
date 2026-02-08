@@ -4,7 +4,7 @@ namespace ProjPlatinaSteam.Interfaces
     public interface IJogoService
     {
         Task<List<Jogo>> ObterJogosDoUsuario(string steamId);
-        Task SincronizarJogosAsync(List<Jogo> jogosSteam);
+        Task SincronizarJogosAsync(List<Jogo> jogosSteam, int usuarioId);
 
     }
 }

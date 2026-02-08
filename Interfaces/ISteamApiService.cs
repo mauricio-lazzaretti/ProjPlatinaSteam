@@ -1,4 +1,5 @@
-﻿using ProjPlatinaSteam.Models;
+﻿using ProjPlatinaSteam.DTOs;
+using ProjPlatinaSteam.Models;
 
 namespace ProjPlatinaSteam.Interfaces
 {
@@ -6,6 +7,7 @@ namespace ProjPlatinaSteam.Interfaces
     {
         Task<List<Jogo>> GetUserGames(string steamId);
         Task<List<Conquista>> GetUserAchievements(string steamId, string gameId);
+        Task<UsuarioSteamDTO> GetUserData(string steamId);
 
     }
 }

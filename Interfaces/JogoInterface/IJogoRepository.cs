@@ -4,7 +4,7 @@ namespace ProjPlatinaSteam.Interfaces.JogoInterface
 {
     public interface IJogoRepository
     {
-        Task<Jogo?> ObterPorSteamAppIdAsync(long steamAppId);
+        Task<Jogo?> ObterPorSteamAppIdEUserAsync(long steamAppId, int usuarioId);
         Task AdicionarAsync(Jogo jogo);
         Task SaveAsync();
        void Update(Jogo jogo);

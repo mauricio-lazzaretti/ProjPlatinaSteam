@@ -30,7 +30,7 @@ namespace ProjPlatinaSteam.Migrations
                 name: "Jogos",
                 columns: table => new
                 {
-                    id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    id = table.Column<int>(type: "int", nullable: false),
                     name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     gameHours = table.Column<int>(type: "int", nullable: false),
                     UsuarioSteamId = table.Column<int>(type: "int", nullable: true)
@@ -57,7 +57,7 @@ namespace ProjPlatinaSteam.Migrations
                     conquistada = table.Column<bool>(type: "bit", nullable: false),
                     unlockTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ehDLC = table.Column<bool>(type: "bit", nullable: false),
-                    Jogoid = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    Jogoid = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {

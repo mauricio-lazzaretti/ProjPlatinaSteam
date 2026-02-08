@@ -30,8 +30,8 @@ namespace ProjPlatinaSteam.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Jogoid")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("Jogoid")
+                        .HasColumnType("int");
 
                     b.Property<string>("apiNome")
                         .IsRequired()
@@ -63,8 +63,8 @@ namespace ProjPlatinaSteam.Migrations
 
             modelBuilder.Entity("ProjPlatinaSteam.Models.Jogo", b =>
                 {
-                    b.Property<string>("id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("id")
+                        .HasColumnType("int");
 
                     b.Property<int?>("UsuarioSteamId")
                         .HasColumnType("int");
@@ -117,9 +117,11 @@ namespace ProjPlatinaSteam.Migrations
 
             modelBuilder.Entity("ProjPlatinaSteam.Models.Jogo", b =>
                 {
-                    b.HasOne("ProjPlatinaSteam.Models.UsuarioSteam", null)
+                    b.HasOne("ProjPlatinaSteam.Models.UsuarioSteam", "UsuarioSteam")
                         .WithMany("jogos")
                         .HasForeignKey("UsuarioSteamId");
+
+                    b.Navigation("UsuarioSteam");
                 });
 
             modelBuilder.Entity("ProjPlatinaSteam.Models.Jogo", b =>

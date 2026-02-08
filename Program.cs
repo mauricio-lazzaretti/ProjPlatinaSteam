@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using ProjPlatinaSteam.Data;
 using ProjPlatinaSteam.Interfaces;
 using ProjPlatinaSteam.Interfaces.JogoInterface;
+using ProjPlatinaSteam.Interfaces.UsuarioInterface;
 using ProjPlatinaSteam.Models.Settings;
 using ProjPlatinaSteam.Repositories;
 using ProjPlatinaSteam.Services;
@@ -19,6 +20,7 @@ builder.Services.AddDbContext<PlatinaSteamContext>(options => options.UseSqlServ
 builder.Services.AddScoped<IJogoService, JogoService>();
 builder.Services.AddScoped<IJogoRepository, JogoRepository>();
 builder.Services.AddScoped<ISteamApiService, SteamApiService>();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
 
 //Console.WriteLine($"Rodando na versão: {Environment.Version}");
