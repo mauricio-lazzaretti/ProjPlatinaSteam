@@ -34,5 +34,15 @@ namespace ProjPlatinaSteam.Repositories
         {
             await _context.SaveChangesAsync();
         }
+
+        public async Task<int> ObterNumeroDeJogosBD(int UsuarioId)
+        {
+            return await _context.Jogos.CountAsync(j => j.UsuarioSteamId == UsuarioId);
+        }
+
+        public async Task<List<Jogo>> ObterJogosDoUserBD(int UsuarioId)
+        {
+            return await _context.Jogos.Where(j => j.UsuarioSteamId == UsuarioId).ToListAsync();
+        }
     }
 }

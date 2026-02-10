@@ -56,9 +56,14 @@ namespace ProjPlatinaSteam.Services.JogoService
                 jogo.UsuarioSteamId = usuario.Id;
             }
 
-            await SincronizarJogosAsync(jogosSteam, usuario.Id);
+            var qtdJogosBanco = await _jogoRepository.ObterNumeroDeJogosBD(usuario.Id); //conta quantos jogos o usuário tem no banco
 
-            return jogosSteam;
+            if (jogosSteam.Count != qtdJogosBanco) //logica para checar se o número de jogos do usuário mudou, caso tenha mudado, chama a função de sincronização
+                await SincronizarJogosAsync(jogosSteam, usuario.Id);
+
+            var jogosUsuarioBD = await _jogoRepository.ObterJogosDoUserBD(usuario.Id); //extraindo os dados do banco para retornar, mais seguro pois a steam pode cair
+
+            return jogosUsuarioBD;
         }
 
         public async Task SincronizarJogosAsync(List<Jogo> jogosSteam, int usuarioId)
