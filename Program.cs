@@ -21,6 +21,7 @@ builder.Services.AddScoped<IJogoService, JogoService>();
 builder.Services.AddScoped<IJogoRepository, JogoRepository>();
 builder.Services.AddScoped<ISteamApiService, SteamApiService>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 
 
 //Console.WriteLine($"Rodando na versão: {Environment.Version}");

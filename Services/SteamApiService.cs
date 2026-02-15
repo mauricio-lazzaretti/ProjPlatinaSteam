@@ -47,7 +47,7 @@ namespace ProjPlatinaSteam.Services
 
             var jogos = steamGames.Select(g => new Jogo
             {
-                id = g.appid,
+                AppId = g.appid,
                 name = g.name,
                 gameHours = g.playtime_forever / 60,
             }).ToList();

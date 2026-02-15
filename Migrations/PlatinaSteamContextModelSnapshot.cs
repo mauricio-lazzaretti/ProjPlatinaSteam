@@ -64,6 +64,12 @@ namespace ProjPlatinaSteam.Migrations
             modelBuilder.Entity("ProjPlatinaSteam.Models.Jogo", b =>
                 {
                     b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<int>("AppId")
                         .HasColumnType("int");
 
                     b.Property<int?>("UsuarioSteamId")

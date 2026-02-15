@@ -6,8 +6,10 @@ namespace ProjPlatinaSteam.Models
     public class Jogo
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
+
+        public int AppId { get; set; }
 
         public string name { get; set; }
 

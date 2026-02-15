@@ -19,32 +19,8 @@ namespace ProjPlatinaSteam.Services.JogoService
             _usuarioRepository = usuarioRepository;
         }
 
-        public async Task<List<Jogo>> ObterJogosDoUsuario(string steamId)
+        public async Task<List<Jogo>> ObterJogosDoUsuario(string steamId, int usuarioId)
         {
-            if (!long.TryParse(steamId, out long steamIdLong))
-            {
-                return new List<Jogo>();
-            }
-
-            var usuario = await _usuarioRepository.ObterPorSteamAppIdAsync(steamIdLong);
-
-            if (usuario == null)
-            {
-                var dto = await _steamApiService.GetUserData(steamId);
-
-                if (dto != null)
-                {
-                    usuario = new UsuarioSteam
-                    {
-                        steamId = steamId, 
-                        name = dto.personaname,
-                        avatarUrl = dto.avatarfull
-                    };
-
-                    await _usuarioRepository.AdicionarAsync(usuario);
-                    await _usuarioRepository.SaveAsync();
-                }
-            }
 
             var jogosSteam = await _steamApiService.GetUserGames(steamId);
 
@@ -53,15 +29,15 @@ namespace ProjPlatinaSteam.Services.JogoService
 
             foreach (var jogo in jogosSteam)
             {
-                jogo.UsuarioSteamId = usuario.Id;
+                jogo.UsuarioSteamId = usuarioId;
             }
 
-            var qtdJogosBanco = await _jogoRepository.ObterNumeroDeJogosBD(usuario.Id); //conta quantos jogos o usuário tem no banco
+            var qtdJogosBanco = await _jogoRepository.ObterNumeroDeJogosBD(usuarioId); //conta quantos jogos o usuário tem no banco
 
             if (jogosSteam.Count != qtdJogosBanco) //logica para checar se o número de jogos do usuário mudou, caso tenha mudado, chama a função de sincronização
-                await SincronizarJogosAsync(jogosSteam, usuario.Id);
+                await SincronizarJogosAsync(jogosSteam, usuarioId);
 
-            var jogosUsuarioBD = await _jogoRepository.ObterJogosDoUserBD(usuario.Id); //extraindo os dados do banco para retornar, mais seguro pois a steam pode cair
+            var jogosUsuarioBD = await _jogoRepository.ObterJogosDoUserBD(usuarioId); //extraindo os dados do banco para retornar, mais seguro pois a steam pode cair
 
             return jogosUsuarioBD;
         }
@@ -88,6 +64,11 @@ namespace ProjPlatinaSteam.Services.JogoService
 
             // Salva tudo de uma vez
             await _jogoRepository.SaveAsync();
+        }
+
+        public async Task<List<Jogo>> ObterJogosOrdenadosDoUsuario(int usuarioId, string ordem)
+        {
+            return await _jogoRepository.ObterJogosOrdenadosDoUserBD(usuarioId, ordem);
         }
     }
 }

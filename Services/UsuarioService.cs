@@ -6,13 +6,43 @@ namespace ProjPlatinaSteam.Services
     public class UsuarioService : IUsuarioService
     {
         private readonly SteamApiService _steamApiService;
-        public UsuarioService(SteamApiService steamApiService) 
+        private readonly IUsuarioRepository _usuarioRepository;
+        public UsuarioService(SteamApiService steamApiService, IUsuarioRepository usuarioRepository) 
         { 
             _steamApiService = steamApiService;
+            _usuarioRepository = usuarioRepository;
         }
-        public Task<List<UsuarioSteam>> ObterDadosUsuario(string steamId)
+        //public Task<List<UsuarioSteam>> ObterDadosUsuario(string steamId)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        public async Task<UsuarioSteam> ObterUsuarioPorSteamId(string steamId)
         {
-            throw new NotImplementedException();
+            if (!long.TryParse(steamId, out long steamIdLong))
+            {
+                return await Task.FromResult<UsuarioSteam>(null);
+            }
+            var usuario = await _usuarioRepository.ObterPorSteamAppIdAsync(steamIdLong);
+
+            if (usuario == null)
+            {
+                var userdto = await _steamApiService.GetUserData(steamId);
+                if (userdto != null)
+                {
+                    usuario = new UsuarioSteam
+                    {
+                        steamId = steamId,
+                        name = userdto.personaname,
+                        avatarUrl = userdto.avatarfull
+                    };
+
+                    await _usuarioRepository.AdicionarAsync(usuario);
+                    await _usuarioRepository.SaveAsync();
+                }
+
+            }
+            return usuario;
         }
     }
 }

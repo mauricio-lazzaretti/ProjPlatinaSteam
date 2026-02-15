@@ -12,8 +12,8 @@ using ProjPlatinaSteam.Data;
 namespace ProjPlatinaSteam.Migrations
 {
     [DbContext(typeof(PlatinaSteamContext))]
-    [Migration("20260208223333_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260215033256_SetupInicial")]
+    partial class SetupInicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -67,6 +67,12 @@ namespace ProjPlatinaSteam.Migrations
             modelBuilder.Entity("ProjPlatinaSteam.Models.Jogo", b =>
                 {
                     b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<int>("AppId")
                         .HasColumnType("int");
 
                     b.Property<int?>("UsuarioSteamId")

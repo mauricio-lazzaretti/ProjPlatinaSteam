@@ -8,6 +8,21 @@
 
 <h1>Jogos</h1>
 
+<form asp-action="Ordem" method="get" class="mb-4">
+
+    <input type="hidden" name="steamId" value="@Model.SteamId" />
+
+    <div class="form-group col-md-4">
+        <label for="ordem">Ordenar por:</label>
+        <select name="ordem" id="ordem" class="form-control" onchange="this.form.submit()">
+            <option value="nome_asc">Nome (A-Z)</option>
+            <option value="nome_desc">Nome (Z-A)</option>
+            <option value="horas_desc">Mais jogados</option>
+            <option value="horas_asc">Menos jogados</option>
+        </select>
+    </div>
+</form>
+
 @if (Model != null)
 {
     <table class="table table-striped">
