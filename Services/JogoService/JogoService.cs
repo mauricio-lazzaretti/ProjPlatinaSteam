@@ -1,8 +1,8 @@
 ﻿using ProjPlatinaSteam.Interfaces;
 using ProjPlatinaSteam.Interfaces.JogoInterface;
-using ProjPlatinaSteam.Interfaces.UsuarioInterface;
 using ProjPlatinaSteam.Models;
-using ProjPlatinaSteam.Repositories;
+//using ProjPlatinaSteam.Interfaces.UsuarioInterface;
+//using ProjPlatinaSteam.Repositories;
 
 namespace ProjPlatinaSteam.Services.JogoService
 {
@@ -10,13 +10,13 @@ namespace ProjPlatinaSteam.Services.JogoService
     {
         private readonly ISteamApiService _steamApiService;
         private readonly IJogoRepository _jogoRepository;
-        private readonly IUsuarioRepository _usuarioRepository;
+        //private readonly IUsuarioRepository _usuarioRepository;
 
-        public JogoService(ISteamApiService steamApiService, IJogoRepository jogoRepository, IUsuarioRepository usuarioRepository)
+        public JogoService(ISteamApiService steamApiService, IJogoRepository jogoRepository)
         {
             _steamApiService = steamApiService;
             _jogoRepository = jogoRepository;
-            _usuarioRepository = usuarioRepository;
+           // _usuarioRepository = usuarioRepository;
         }
 
         public async Task<List<Jogo>> ObterJogosDoUsuario(string steamId, int usuarioId)

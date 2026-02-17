@@ -3,6 +3,7 @@ using ProjPlatinaSteam.Data;
 using ProjPlatinaSteam.Interfaces;
 using ProjPlatinaSteam.Interfaces.JogoInterface;
 using ProjPlatinaSteam.Interfaces.UsuarioInterface;
+using ProjPlatinaSteam.Interfaces.ConquistaInterface;
 using ProjPlatinaSteam.Models.Settings;
 using ProjPlatinaSteam.Repositories;
 using ProjPlatinaSteam.Services;
@@ -22,6 +23,8 @@ builder.Services.AddScoped<IJogoRepository, JogoRepository>();
 builder.Services.AddScoped<ISteamApiService, SteamApiService>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<IConquistaService, ConquistaService>();
+builder.Services.AddScoped<IConquistaRepository, ConquistaRepository>();
 
 
 //Console.WriteLine($"Rodando na versão: {Environment.Version}");

@@ -13,5 +13,8 @@ namespace ProjPlatinaSteam.Models
         public DateTime? unlockTime { get; set; }
         public bool ehDLC { get; set; }
 
+        public int JogoId { get; set; } //foreign key
+        public Jogo jogos { get; set; }
+
     }
 }

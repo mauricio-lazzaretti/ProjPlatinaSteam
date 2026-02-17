@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProjPlatinaSteam.Interfaces;
 using ProjPlatinaSteam.Interfaces.UsuarioInterface;
+using ProjPlatinaSteam.Interfaces.ConquistaInterface;
 using ProjPlatinaSteam.Models;
 using ProjPlatinaSteam.Models.ViewModels;
 
@@ -11,12 +12,15 @@ namespace ProjPlatinaSteam.Controllers
         private readonly ISteamApiService _steamApiService;
         private readonly IJogoService _jogoService;
         private readonly IUsuarioService _usuarioService;
+        private readonly IConquistaService _conquistaService;
 
-        public SteamController(ISteamApiService steamApiService, IJogoService jogoService, IUsuarioService usuarioService)
+        public SteamController(ISteamApiService steamApiService, IJogoService jogoService, IUsuarioService usuarioService, IConquistaService conquistaService)
         {
             _steamApiService = steamApiService;
             _jogoService = jogoService;
             _usuarioService = usuarioService;
+            _conquistaService = conquistaService;
+            _conquistaService = conquistaService;
         }
 
         private async Task<UsuarioSteam> Usuario(string steamId) //helper
@@ -69,12 +73,16 @@ namespace ProjPlatinaSteam.Controllers
             
         //}
 
-        public async Task<IActionResult> Conquistas(string steamId, string gameId)
+        public async Task<IActionResult> Conquistas(string steamId, string AppIdSteam, string jogoIdBanco)
         {
-            if (string.IsNullOrEmpty(steamId) || string.IsNullOrEmpty(gameId))
+            if (string.IsNullOrEmpty(steamId) || string.IsNullOrEmpty(AppIdSteam))
                 return RedirectToAction("Index");
 
-            var conquistas = await _steamApiService.GetUserAchievements(steamId, gameId);
+            int.TryParse(jogoIdBanco, out int jogoIdInt);
+
+            //var usuario = await Usuario(steamId);
+
+            var conquistas = await _conquistaService.ObterConquistasDoJogo(steamId, AppIdSteam, jogoIdInt);
 
             return View(conquistas);
         }

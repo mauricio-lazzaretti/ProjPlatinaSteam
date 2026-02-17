@@ -57,10 +57,10 @@ namespace ProjPlatinaSteam.Services
             return jogos;
         }
 
-        public async Task<List<Conquista>> GetUserAchievements(string steamId, string gameId)
+        public async Task<List<Conquista>> GetUserAchievements(string steamId, string AppIdSteam, int jogoIdBanco)
         {
-            var achievements = await GetPlayerAchievements(steamId, gameId);
-            var schemaAchievements = await GetSchemaForGame(gameId);
+            var achievements = await GetPlayerAchievements(steamId, AppIdSteam);
+            var schemaAchievements = await GetSchemaForGame(AppIdSteam);
 
 
             var conquistas = achievements.Select(a => new Conquista
@@ -68,10 +68,12 @@ namespace ProjPlatinaSteam.Services
                 nome = schemaAchievements.FirstOrDefault(s => s.name == a.apiname)?.displayName ?? string.Empty.ToString(),
                 descricao = schemaAchievements.FirstOrDefault(s => s.name == a.apiname)?.description ?? string.Empty.ToString(),
                 apiNome = a.apiname,
+                JogoId = jogoIdBanco,
                 conquistada = a.achieved == 1,
                 unlockTime = a.unlockTime > 0
                 ? DateTimeOffset.FromUnixTimeSeconds(a.unlockTime).DateTime
                 : null
+                
             }).ToList();
 
             return conquistas;
