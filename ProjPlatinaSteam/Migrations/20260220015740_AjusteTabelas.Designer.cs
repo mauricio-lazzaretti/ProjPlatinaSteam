@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjPlatinaSteam.Data;
 
@@ -11,9 +12,11 @@ using ProjPlatinaSteam.Data;
 namespace ProjPlatinaSteam.Migrations
 {
     [DbContext(typeof(PlatinaSteamContext))]
-    partial class PlatinaSteamContextModelSnapshot : ModelSnapshot
+    [Migration("20260220015740_AjusteTabelas")]
+    partial class AjusteTabelas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,7 +33,7 @@ namespace ProjPlatinaSteam.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("Jogoid")
+                    b.Property<int>("JogoId")
                         .HasColumnType("int");
 
                     b.Property<string>("apiNome")
@@ -56,7 +59,7 @@ namespace ProjPlatinaSteam.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Jogoid");
+                    b.HasIndex("JogoId");
 
                     b.ToTable("Conquistas");
                 });
@@ -116,9 +119,13 @@ namespace ProjPlatinaSteam.Migrations
 
             modelBuilder.Entity("ProjPlatinaSteam.Models.Conquista", b =>
                 {
-                    b.HasOne("ProjPlatinaSteam.Models.Jogo", null)
+                    b.HasOne("ProjPlatinaSteam.Models.Jogo", "jogos")
                         .WithMany("conquistas")
-                        .HasForeignKey("Jogoid");
+                        .HasForeignKey("JogoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("jogos");
                 });
 
             modelBuilder.Entity("ProjPlatinaSteam.Models.Jogo", b =>

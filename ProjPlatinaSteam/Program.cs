@@ -34,6 +34,15 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
+// No topo do Program.cs, após o var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<PlatinaSteamContext>();
+    // Isso cria o banco e as tabelas se elas não existirem
+    context.Database.Migrate();
+}
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

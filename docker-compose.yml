@@ -1,0 +1,15 @@
+services:
+  sql-platinasteam:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sql-platinasteam
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_PID=developer
+
+  projplatinasteam:
+    image: ${DOCKER_REGISTRY-}projplatinasteam
+    build:
+      context: .
+      dockerfile: ProjPlatinaSteam/Dockerfile
+    depends_on:
+      - sql-platinasteam
