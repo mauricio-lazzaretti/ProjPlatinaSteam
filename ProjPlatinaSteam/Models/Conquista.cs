@@ -11,7 +11,7 @@ namespace ProjPlatinaSteam.Models
         public string descricao { get; set; }
         public bool conquistada { get; set; }
         public DateTime? unlockTime { get; set; }
-        public bool ehDLC { get; set; }
+        public bool ehDLC { get; set; } = false;
 
         public int JogoId { get; set; } //foreign key
         public Jogo jogos { get; set; }

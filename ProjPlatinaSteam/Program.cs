@@ -1,11 +1,14 @@
+using AspNet.Security.OpenId;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using ProjPlatinaSteam.Data;
 using ProjPlatinaSteam.Interfaces;
+using ProjPlatinaSteam.Interfaces.ConquistaInterface;
 using ProjPlatinaSteam.Interfaces.JogoInterface;
 using ProjPlatinaSteam.Interfaces.UsuarioInterface;
-using ProjPlatinaSteam.Interfaces.ConquistaInterface;
 using ProjPlatinaSteam.Models.Settings;
 using ProjPlatinaSteam.Repositories;
+using ProjPlatinaSteam.Security;
 using ProjPlatinaSteam.Services;
 using ProjPlatinaSteam.Services.JogoService;
 
@@ -26,11 +29,31 @@ builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IConquistaService, ConquistaService>();
 builder.Services.AddScoped<IConquistaRepository, ConquistaRepository>();
 
-
 //Console.WriteLine($"Rodando na versão: {Environment.Version}");
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = "Steam";
+})
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/login";
+        options.AccessDeniedPath = "/Home/Index";
+    })
+    .AddSteam(options =>
+    {
+        options.ApplicationKey = builder.Configuration["SteamSettings:ApiKey"];
+
+        options.Events = new OpenIdAuthenticationEvents
+        {
+            OnTicketReceived = SteamAuthEventsHandler.OnTicketReceivedAsync
+        };
+    });
 
 var app = builder.Build();
 
@@ -56,6 +79,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

@@ -3,6 +3,27 @@
     ViewData["Title"] = "Buscar jogos da Steam";
 }
 
+@if (!User.Identity.IsAuthenticated)
+{
+    <a href="/login" class="mb-4 d-block">
+        <img src="https://community.cloudflare.steamstatic.com/public/images/signinthroughsteam/sits_01.png" alt="Entrar com a Steam" />
+    </a>
+}
+else
+{
+    <div class="alert alert-success">
+        Você está logado como: <strong>@User.Identity.Name</strong>
+
+        @if (User.IsInRole("Admin"))
+        {
+            <span class="badge bg-warning text-dark ms-2">👑 Administrador do Sistema</span>
+        }
+
+        <br />
+        <a href="/logout" class="btn btn-sm btn-danger mt-2">Sair (Logout)</a>
+    </div>
+}
+
 <h1>Buscar jogos da Steam</h1>
 
 <form method="post" asp-controller="Steam" asp-action="Jogos">
@@ -10,5 +31,5 @@
         <label for="steamIdInput">Digite seu SteamID64:</label>
         <input type="text" class="form-control" id="steamIdInput" name="steamId" placeholder="Exemplo: 76561198000000000" required />
     </div>
-    <button type="submit" class="btn btn-primary">Buscar Jogos</button>
+    <button type="submit" class="btn btn-primary mt-2">Buscar Jogos</button>
 </form>

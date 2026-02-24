@@ -1,30 +1,45 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-@model List<ProjPlatinaSteam.Models.Conquista>
+﻿@model List<ProjPlatinaSteam.Models.Conquista>
 
-    <h1>Conquistas</h1>
-
+<h1 class="titulo-pagina">Conquistas</h1>
 
 @if (Model != null && Model.Any())
 {
-    <table class="table table-striped">
-        <thead>
+    <table class="table table-striped tabela-conquistas">
+        <thead class="cabecalho-tabela">
             <tr>
                 <th>Nome conquista</th>
                 <th>ApiNome</th>
                 <th>Conquistada</th>
+                <th>Status (DLC)</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="corpo-tabela">
             @foreach (var conquista in Model)
             {
-                <tr>
-                    <td>@conquista.nome</td>
-                    <td>@conquista.apiNome</td>
-                    <td>@conquista.conquistada</td>
+                <tr class="linha-conquista">
+                    <td class="celula-nome">@conquista.nome</td>
+                    <td class="celula-api">@conquista.apiNome</td>
+                    <td class="celula-conquistada">@conquista.conquistada</td>
+
+                    <td class="celula-acao-dlc">
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <form asp-controller="Conquista" asp-action="AlternarDlc" method="post" class="d-inline formulario-dlc">
+                                <input type="hidden" name="id" value="@conquista.Id" />
+
+                                <button type="submit" class="btn btn-sm @(conquista.ehDLC ? "btn-warning" : "btn-outline-secondary") botao-alternar-dlc">
+                                    @(conquista.ehDLC ? "🌟 Remover de DLC" : "Marcar como DLC")
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            @if (conquista.ehDLC)
+                            {
+                                <span class="badge bg-warning text-dark etiqueta-dlc">DLC</span>
+                            }
+                        }
+                    </td>
                 </tr>
             }
         </tbody>
@@ -32,5 +47,5 @@
 }
 else
 {
-    
+    <p class="mensagem-tabela-vazia">Nenhuma conquista encontrada para este jogo.</p>
 }

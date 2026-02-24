@@ -5,6 +5,10 @@ services:
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_PID=developer
+    volumes:
+      - sql_data:/var/opt/mssql
+
+      
 
   projplatinasteam:
     image: ${DOCKER_REGISTRY-}projplatinasteam
@@ -13,3 +17,6 @@ services:
       dockerfile: ProjPlatinaSteam/Dockerfile
     depends_on:
       - sql-platinasteam
+
+volumes:
+  sql_data:  
