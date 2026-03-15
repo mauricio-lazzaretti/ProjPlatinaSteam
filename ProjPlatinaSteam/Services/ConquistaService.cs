@@ -51,5 +51,11 @@ namespace ProjPlatinaSteam.Services
             // Salva tudo de uma vez
             await _conquistaRepository.SaveAsync();
         }
+
+        public async Task<List<Conquista>> TrazerConquistasDoBD(int jogoIdBanco)
+        {
+            return await _conquistaRepository.ObterPorJogoId(jogoIdBanco);
+        }
+
     }
 }

@@ -42,7 +42,7 @@ namespace ProjPlatinaSteam.Repositories
 
         public async Task<List<Jogo>> ObterJogosDoUserBD(int UsuarioId)
         {
-            return await _context.Jogos.Where(j => j.UsuarioSteamId == UsuarioId).ToListAsync();
+            return await _context.Jogos.Include(j => j.conquistas).Where(j => j.UsuarioSteamId == UsuarioId).ToListAsync();
         }
 
         public async Task<List<Jogo>> ObterJogosOrdenadosDoUserBD(int UsuarioId, string ordem)

@@ -6,5 +6,6 @@ namespace ProjPlatinaSteam.Interfaces.ConquistaInterface
     {
         Task<List<Conquista>> ObterConquistasDoJogo(string steamId, string AppIdSteam, int jogoIdBanco);
         Task SincronizarConquistasAsync(List<Conquista> conquistasSteam, int jogoId);
+        Task<List<Conquista>> TrazerConquistasDoBD(int jogoIdBanco);
     }
 }

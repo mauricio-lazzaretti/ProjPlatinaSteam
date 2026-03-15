@@ -6,6 +6,7 @@ namespace ProjPlatinaSteam.Interfaces.UsuarioInterface
     {
        // Task<List<UsuarioSteam>> ObterDadosUsuario(string steamId);
         //Task SincronizarUsuarioAsync(List<UsuarioSteam> usuarioSteam);
-        Task<UsuarioSteam> ObterUsuarioPorSteamId(string steamId);
+        Task<UsuarioSteam> ObterUsuarioBD(string steamId);
+        Task<UsuarioSteam> ObterUsuarioAPI(string steamId);
     }
 }

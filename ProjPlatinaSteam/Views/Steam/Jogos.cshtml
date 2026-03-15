@@ -1,60 +1,75 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-@model ProjPlatinaSteam.Models.ViewModels.JogosViewModel
-
+﻿@model ProjPlatinaSteam.Models.ViewModels.JogosViewModel
 
 <h1>Jogos</h1>
 
 <form asp-action="Ordem" method="get" class="mb-4">
-
     <input type="hidden" name="steamId" value="@Model.SteamId" />
-
-    <div class="form-group col-md-4">
-        <label for="ordem">Ordenar por:</label>
-        <select name="ordem" id="ordem" class="form-control" onchange="this.form.submit()">
-            <option value="nome_asc">Nome (A-Z)</option>
-            <option value="nome_desc">Nome (Z-A)</option>
-            <option value="horas_desc">Mais jogados</option>
-            <option value="horas_asc">Menos jogados</option>
-        </select>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="ordem">Ordenar por:</label>
+            <select name="ordem" id="ordem" class="form-control" onchange="this.form.submit()">
+                <option value="nome_asc">Nome (A-Z)</option>
+                <option value="nome_desc">Nome (Z-A)</option>
+                <option value="horas_desc">Mais jogados</option>
+                <option value="horas_asc">Menos jogados</option>
+            </select>
+        </div>
     </div>
 </form>
 
-@if (Model != null)
+@if (Model != null && Model.Jogos.Any())
 {
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Nome do Jogo</th>
-                <th>AppID</th>
-                <th>Horas Jogadas</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var jogo in Model.Jogos)
-            {
-                <tr>
-                    <td>@jogo.name</td>
-                    <td>@jogo.id</td>
-                    <td>@jogo.gameHours</td>
-                    <td>
-                        <a asp-action="Conquistas"
-                           asp-route-steamId="@Model.SteamId"
-                           asp-route-AppIdSteam="@jogo.AppId"
-                           asp-route-jogoIdBanco="@jogo.id"
-                           class="btn-achievementes">
-                            Achievements
-                        </a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="row">
+        @foreach (var jogo in Model.Jogos)
+        {
+            // Cálculo da porcentagem (C# puro na memória)
+            var total = jogo.conquistas?.Count ?? 0;
+            var obtidas = jogo.conquistas?.Count(c => c.conquistada) ?? 0;
+            var percentual = total > 0 ? (int)Math.Round((double)obtidas / total * 100) : 0;
+
+            <div class="col-12 col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 shadow-sm" style="background-color: #1a1a1a; color: white; border: 1px solid #333; border-radius: 10px; overflow: hidden;">
+
+                    <img src="https://cdn.akamai.steamstatic.com/steam/apps/@jogo.AppId/header.jpg" class="card-img-top" alt="@jogo.name">
+
+                    <div class="card-body">
+                        <h5 class="card-title text-truncate" title="@jogo.name">@jogo.name</h5>
+                        <p class="card-text mb-1">
+                            <small class="text-muted">AppID: @jogo.AppId</small> |
+                            <small class="text-muted">Horas: @(Math.Round(jogo.gameHours / 60.0, 1))h</small>
+                        </p>
+
+                        <div class="progress-container mt-3" style="position: relative;">
+                            <div class="progress" style="height: 25px; background-color: #2c2c2c; border-radius: 5px;">
+                                <div class="progress-bar @(percentual == 100 ? "bg-warning text-dark" : "bg-success")"
+                                     role="progressbar"
+                                     style="width: @percentual%; transition: width 1s ease-in-out;"
+                                     aria-valuenow="@percentual"
+                                     aria-valuemin="0"
+                                     aria-valuemax="100">
+                                </div>
+                            </div>
+                            <span style="position: absolute; width: 100%; text-align: center; top: 0; color: white; font-weight: bold; font-size: 0.8rem; line-height: 25px; text-shadow: 1px 1px 2px #000;">
+                                @percentual% (@obtidas/@total)
+                            </span>
+                        </div>
+
+                        <div class="mt-3">
+                            <a asp-action="Conquistas"
+                               asp-route-steamId="@Model.SteamId"
+                               asp-route-AppIdSteam="@jogo.AppId"
+                               asp-route-jogoIdBanco="@jogo.id"
+                               class="btn btn-outline-light btn-sm w-100">
+                                Ver Detalhes das Conquistas
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 }
 else
 {
-    <p>Nenhum jogo encontrado para este SteamID64.</p>
+    <div class="alert alert-info">Nenhum jogo encontrado para este SteamID64.</div>
 }

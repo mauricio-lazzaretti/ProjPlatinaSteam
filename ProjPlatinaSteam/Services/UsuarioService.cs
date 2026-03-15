@@ -17,31 +17,34 @@ namespace ProjPlatinaSteam.Services
         //    throw new NotImplementedException();
         //}
 
-        public async Task<UsuarioSteam> ObterUsuarioPorSteamId(string steamId)
+        public async Task<UsuarioSteam> ObterUsuarioBD(string steamId)
         {
             if (!long.TryParse(steamId, out long steamIdLong))
             {
                 return await Task.FromResult<UsuarioSteam>(null);
             }
             var usuario = await _usuarioRepository.ObterPorSteamAppIdAsync(steamIdLong);
+          
+            return usuario;
+        }
 
-            if (usuario == null)
+        public async Task<UsuarioSteam> ObterUsuarioAPI(string steamId)
+        {  
+            var userdto = await _steamApiService.GetUserData(steamId);
+            UsuarioSteam usuario = null;
+            if (userdto != null)
             {
-                var userdto = await _steamApiService.GetUserData(steamId);
-                if (userdto != null)
+                usuario = new UsuarioSteam
                 {
-                    usuario = new UsuarioSteam
-                    {
-                        steamId = steamId,
-                        name = userdto.personaname,
-                        avatarUrl = userdto.avatarfull
-                    };
+                    steamId = steamId,
+                    name = userdto.personaname,
+                    avatarUrl = userdto.avatarfull
+                };
 
-                    await _usuarioRepository.AdicionarAsync(usuario);
-                    await _usuarioRepository.SaveAsync();
-                }
-
+                await _usuarioRepository.AdicionarAsync(usuario);
+                await _usuarioRepository.SaveAsync();
             }
+
             return usuario;
         }
     }

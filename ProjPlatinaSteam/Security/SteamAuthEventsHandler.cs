@@ -17,7 +17,7 @@ namespace ProjPlatinaSteam.Security
 
                 string steamIdLimpo = steamIdClaim.Value.Split('/').LastOrDefault();
 
-                var usuario = await usuarioService.ObterUsuarioPorSteamId(steamIdLimpo);
+                var usuario = await usuarioService.ObterUsuarioBD(steamIdLimpo);
 
                 if (usuario != null && usuario.IsAdmin)
                 {
