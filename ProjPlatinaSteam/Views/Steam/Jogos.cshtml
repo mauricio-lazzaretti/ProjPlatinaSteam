@@ -22,7 +22,6 @@
     <div class="row">
         @foreach (var jogo in Model.Jogos)
         {
-            // Cálculo da porcentagem (C# puro na memória)
             var total = jogo.conquistas?.Count ?? 0;
             var obtidas = jogo.conquistas?.Count(c => c.conquistada) ?? 0;
             var percentual = total > 0 ? (int)Math.Round((double)obtidas / total * 100) : 0;

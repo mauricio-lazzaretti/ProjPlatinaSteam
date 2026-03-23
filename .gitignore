@@ -3,6 +3,10 @@
 ##
 ## Get latest from `dotnet new gitignore`
 
+appsettings.json
+appsettings.Development.json
+docker-compose.override.yml
+
 !**/Migrations/
 
 # dotenv files

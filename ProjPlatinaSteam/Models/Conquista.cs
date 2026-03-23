@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace ProjPlatinaSteam.Models
 {
     public class Conquista
     {
-        //decidi usar os nomes de variaveis em ingles para padronizar com mercado
         [Key] public int Id { get; set; }
         public string apiNome { get; set; }
         public string nome { get; set; }
@@ -14,6 +14,8 @@ namespace ProjPlatinaSteam.Models
         public bool ehDLC { get; set; } = false;
 
         public int JogoId { get; set; } //foreign key
+
+        [JsonIgnore]
         public Jogo jogos { get; set; }
 
     }

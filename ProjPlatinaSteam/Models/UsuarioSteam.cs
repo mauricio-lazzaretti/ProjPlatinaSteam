@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace ProjPlatinaSteam.Models
 {
@@ -10,6 +11,7 @@ namespace ProjPlatinaSteam.Models
         public bool IsAdmin { get; set; } = false;
         public string name { get; set; }
         public string avatarUrl { get; set; }
+
         public List<Jogo> jogos { get; set; }
     }
 }

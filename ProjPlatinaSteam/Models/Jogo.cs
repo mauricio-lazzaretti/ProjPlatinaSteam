@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace ProjPlatinaSteam.Models
 {
@@ -19,6 +20,7 @@ namespace ProjPlatinaSteam.Models
 
         public int? UsuarioSteamId { get; set; } //foreign key
 
+        [JsonIgnore]
         public UsuarioSteam UsuarioSteam { get; set; }
 
     }

@@ -1,0 +1,159 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to top, rgba(0, 42, 61, 1) 0%, rgba(62, 118, 156, 1) 100%);
+    font: icon;
+    min-height: 100vh;
+}
+
+.head-index{
+    display: flex;
+    width: 100%;
+    height: 300px;
+    position: relative;
+    align-items: center;  
+    justify-content: space-between;
+    background-color: #121f30;
+    border-bottom: solid white 1px;
+    font-size: small;
+    font-style: oblique;
+    color: rgb(0, 0, 0);
+    padding: 0;
+}
+.title-finder{
+    position: absolute;
+    bottom: 0;
+    margin: 15px;
+    background-color: transparent;
+    z-index: 1;
+    transform: translateY(50%);
+}
+.title-finder::after,
+.ordenador::after{
+    content: "";      
+    border-radius: 15px;     /* Obrigatório para o pseudo-elemento aparecer */
+    position: absolute;    /* Faz ele flutuar sobre o pai */
+    top: 0;
+    left: 0;
+    width: 105%;           /* Mesma largura do pai */
+    height: 100%;          /* Mesma altura do pai */
+    background-color: #cedbeb4b; /* A cor que você quer */
+    backdrop-filter: blur(3px);
+    transform: scale(1.1);
+    z-index: -1;
+}
+
+.ordenador{
+    position: absolute;
+    background-color: transparent;
+    height: 30px;
+    width: 100px;
+    right: 100px;
+    bottom: 0;
+    transform: translateY(50%);
+    cursor: pointer;
+    z-index: 1;
+}
+.ordenador::after{
+    top: -50%; 
+    left: -20%;
+    height: 200%;
+    width: 150%;
+}
+
+#ordem{
+    background-color: #121f30;
+    height: 30px;
+    color: #ffd000;
+}
+
+.container-card {
+    display: flex;
+    flex-wrap: wrap;      /*vários jogos por linha */
+    margin-top: 50px;
+    gap: 30px;
+    padding: 40px;
+    justify-content: center;
+    min-height: 200px;
+}
+
+.cards {
+    background-color: #121f30; 
+    border-radius: 15px;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0px 7px 10px rgba(0, 0, 0, 0.7);
+    transition: transform 0.2s, box-shadow 0.2s;
+    color: white;
+    font:icon;
+    text-align: center;
+}
+.cards-complete {
+    background-color: #121f30; 
+    border: #ffd000 solid 1px;
+    border-radius: 15px;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0px 7px 10px rgba(255, 208, 0, 0.514);
+    transition: transform 0.2s, box-shadow 0.2s;
+    color: white;
+    font:icon;
+    text-align: center;
+}
+
+.cards:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.9);
+}
+.cards-complete:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.9);
+}
+
+.img-card {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.img-profile{
+    height: 75px;
+    width: 75px;
+}
+
+.user-profile{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.progress-underway {
+    width: 100%;
+    height: 20px;
+    accent-color: #66c0f4;
+    margin-top: 10px;
+}
+
+.progress-complete{
+    width: 100%;
+    height: 20px;
+    accent-color: #ffd000;
+    margin-top: 10px;
+}
+
+.achievements-count{
+    margin-top: 1px;
+    color: rgba(128, 128, 128, 0.658);
+}
+
+.fa-regular{
+    font: icon;
+    font-style: unset;
+    font-size: 20px;
+}
+.horas{
+    color: rgba(128, 128, 128, 0.459);
+}
+

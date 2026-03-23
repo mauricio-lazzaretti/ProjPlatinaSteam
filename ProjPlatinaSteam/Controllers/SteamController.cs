@@ -54,6 +54,7 @@ namespace ProjPlatinaSteam.Controllers
             return View("Jogos", viewModel);
         }
 
+        [HttpGet("api/jogos/{steamId}")]
         public async Task<IActionResult> Jogos(string steamId)
         {
             if (string.IsNullOrEmpty(steamId))
@@ -63,32 +64,20 @@ namespace ProjPlatinaSteam.Controllers
             List<Jogo> jogosUsuario;
             if (usuario != null)
             {
-                jogosUsuario = await _jogoService.ObterJogosDoUsuario(steamId, usuario.Id); //ajustar aq para prever situacoes de horas e quantidade de jogos diferentes desde o ultimo login
+                jogosUsuario = await _jogoService.ObterJogosDoUsuario(steamId, usuario.Id); //Busca os jogos diretamente do BD, exceto pelos jogos novos
             }
             else
             {
                 usuario = await _usuarioService.ObterUsuarioAPI(steamId);
-                jogosUsuario = await _jogoService.ObterJogosPrimeiroAcesso(steamId, usuario.Id); // em tese, e isso, mas precisa testar
+                jogosUsuario = await _jogoService.ObterJogosPrimeiroAcesso(steamId, usuario.Id); // Primeiro acesso do user, busca todos os dados da Api e leva para o BD
             }
-            //usar GetRecentlyPlayedGames para fazer a atualizacao das conquistas da barrinha de progresso q esta por vir
 
-            var viewModel = new JogosViewModel
-            {
-                SteamId = steamId,
-                Jogos = jogosUsuario
-            };
-
-            return View(viewModel);
+            return Ok(usuario); // usuario acaba tendo a lista de jogos, que por sua vez tem a lista de conquistas, um json completo
         }
 
-        //public async Task<IActionResult> OrdenarJogos(string steamId)
-        //{
-            
-        //}
-
-        public async Task<IActionResult> Conquistas(string steamId, string AppIdSteam, string jogoIdBanco)
+        public async Task<IActionResult> Conquistas(string AppIdSteam, string jogoIdBanco)
         {
-            if (string.IsNullOrEmpty(steamId) || string.IsNullOrEmpty(AppIdSteam))
+            if (string.IsNullOrEmpty(AppIdSteam))
                 return RedirectToAction("Index");
 
             int.TryParse(jogoIdBanco, out int jogoIdInt);
@@ -102,7 +91,7 @@ namespace ProjPlatinaSteam.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return Ok();
         }
     }
 }

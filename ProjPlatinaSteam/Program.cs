@@ -55,27 +55,44 @@ builder.Services.AddAuthentication(options =>
         };
     });
 
+// Adiciona a política de acesso
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MinhaAppSteam", policy =>
+    {
+        policy.AllowAnyOrigin()  // Permite qualquer site
+              .AllowAnyHeader()  // Permite qualquer cabeçalho
+              .AllowAnyMethod(); // Permite GET, POST, etc.
+    });
+});
+
 var app = builder.Build();
 
-// No topo do Program.cs, após o var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
-    var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<PlatinaSteamContext>();
-    // Isso cria o banco e as tabelas se elas não existirem
-    context.Database.Migrate();
+    try
+    {
+        var services = scope.ServiceProvider;
+        var context = services.GetRequiredService<PlatinaSteamContext>();
+        context.Database.Migrate();
+        Console.WriteLine("Base de dados pronta!");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Aviso: A base de dados já existe ou está a ligar. Ignorando erro de arranque...");
+    }
 }
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseCors("MinhaAppSteam");
 
 app.UseRouting();
 
