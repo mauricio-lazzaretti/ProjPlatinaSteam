@@ -25,7 +25,7 @@ namespace ProjPlatinaSteam.Services
 
         public async Task<UsuarioSteam?> ObterOPerfilCompleto(string steamId)
         {
-            string cacheKey = "perfil_completo_{steamId}";
+            string cacheKey = $"perfil_completo_{steamId}";
 
             if (_memoryCache.TryGetValue(cacheKey, out UsuarioSteam? usuarioNoCache))
                 return usuarioNoCache;
@@ -44,6 +44,9 @@ namespace ProjPlatinaSteam.Services
 
                 jogosUsuario = await _jogoService.ObterJogosPrimeiroAcesso(steamId, usuario.Id); // Primeiro acesso do user, busca todos os dados da Api e leva para o BD         
             }
+
+            if (usuario != null && jogosUsuario != null)
+                usuario.jogos = jogosUsuario;
 
             if (usuario != null)
             {
