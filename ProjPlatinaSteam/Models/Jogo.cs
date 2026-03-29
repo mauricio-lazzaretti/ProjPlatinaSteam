@@ -20,8 +20,5 @@ namespace ProjPlatinaSteam.Models
 
         public int? UsuarioSteamId { get; set; } //foreign key
 
-        [JsonIgnore]
-        public UsuarioSteam UsuarioSteam { get; set; }
-
     }
 }

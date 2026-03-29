@@ -12,11 +12,7 @@ namespace ProjPlatinaSteam.Models
         public bool conquistada { get; set; }
         public DateTime? unlockTime { get; set; }
         public bool ehDLC { get; set; } = false;
-
         public int JogoId { get; set; } //foreign key
-
-        [JsonIgnore]
-        public Jogo jogos { get; set; }
 
     }
 }

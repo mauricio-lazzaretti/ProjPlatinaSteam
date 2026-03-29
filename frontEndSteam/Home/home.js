@@ -56,7 +56,7 @@ async function RetornaLista(steamid)
     }
 
     try {
-        const respostaBack = await fetch(`http://localhost:5000/api/jogos/${steamid}`);
+        const respostaBack = await fetch(`http://localhost:5000/api/perfil/${steamid}`);
         if(respostaBack.ok)
         {
             let listaJogos = await respostaBack.json();
